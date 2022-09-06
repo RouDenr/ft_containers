@@ -85,8 +85,6 @@ vector<T, Allocator>::~vector() {
 
 template <typename T, typename Allocator>
 T& vector<T, Allocator>::operator[](size_type n) {
-    if (n > this->_size)
-        throw std::out_of_range("out of range");
     return this->_data[n];
 }
 
@@ -148,8 +146,8 @@ Allocator vector<T, Allocator>::get_allocator() const {
 
 template<typename T, typename Allocator>
 const T& vector<T, Allocator>::at(vector::size_type pos) const {
-    if (pos < size())
-        throw std::out_of_range("out of range");
+    if (pos < size() || size() == 0)
+        throw std::out_of_range("vector");
     return this->_data[pos];
 }
 

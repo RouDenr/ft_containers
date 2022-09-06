@@ -10,6 +10,10 @@
 
 
 int main() {
+
+    ft::map<int> test_map;
+
+
     int n[6] = {1, 2, 3, 4, 5, 6};
     ft::vector<int> ft_test(n, n + 5);
     size_t t1 = 5;
