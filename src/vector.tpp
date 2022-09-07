@@ -68,13 +68,14 @@ template <typename T, typename Allocator>
 vector<T, Allocator>& vector<T, Allocator>::operator=(const vector& other) {
     if (this->_data != other._data) {
         if (this->data() != NULL)
-            this->_alloc.deallocate(this->_data);
+            this->_alloc.deallocate(this->_data, this->_capacity);
         this->_capacity = other._capacity;
         this->_size = other.size();
         this->_data = this->_alloc.allocate(other._capacity);
-        for (size_type i; i < this->_size; i++)
-            this->_data = other._data[i];
+        for (size_type i = 0; i < this->_size; i++)
+            this->_data[i] = other._data[i];
     }
+    return *this;
 }
 
 template <typename T, typename Allocator>

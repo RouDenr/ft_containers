@@ -48,6 +48,13 @@ leaks	:	${NAME_EXT}
 norm	:
 	cpplint ${SRCS}
 
+tests	: ${OBJS}
+	${CC} -g src/test_orig.cpp -o test_orig
+	./test_orig > test_orig.log || echo err
+	${CC} -g src/test_ft.cpp -o test_ft
+	./test_ft > test_ft.log  || echo err
+	diff test_ft.log test_orig.log
+
 #!--DEBUG
 
 clean	:
