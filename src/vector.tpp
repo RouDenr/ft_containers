@@ -228,12 +228,21 @@ template<typename T, typename Allocator>
 void vector<T, Allocator>::reserve(vector::size_type new_cap) {
     if (new_cap <= capacity())
         return;
+
     pointer copy;
-    copy = this->_alloc.allocate(new_cap);
+    size_type tmp_cap;
+
+    if (capacity() * 2 < new_cap)
+        tmp_cap = (new_cap > 128) ? new_cap : 128;
+    else
+        tmp_cap = capacity() * 2;
+    if (tmp_cap > max_size())
+        throw std::length_error("vector");
+    copy = this->_alloc.allocate(tmp_cap);
     std::copy(begin(), end(), copy);
 
     this->_alloc.deallocate(this->_data, this->_capacity);
-    this->_capacity = new_cap;
+    this->_capacity = tmp_cap;
     this->_data = copy;
 }
 
