@@ -29,9 +29,14 @@ namespace ft {
         explicit vector(size_type count,   // (3)
                         const T& value = T(),
                         const Allocator& allocator = Allocator());
-//        template<typename InputIt> // (5)
-        vector(pointer first, pointer last,
-               const Allocator& alloc = Allocator());
+        template<
+                class InputIt
+                ,typename = typename enable_if< !is_integral<InputIt>::value >::type
+        >
+        vector(InputIt first, InputIt last,
+               const Allocator& alloc = Allocator()
+//                       , typename enable_if< _is_not_integral<T>::value >::type* = NULL
+                       );
 
         vector(const vector& other); // (6)
 
@@ -79,7 +84,8 @@ namespace ft {
 
         iterator insert( iterator pos, const T& value );
         void insert( iterator pos, size_type count, const T& value );
-//        template< class InputIt >
+
+//        template< class InputIt, typename = enable_if<is_integral<InputIt> > >
         void insert( iterator pos, pointer first, pointer last );
 
         iterator erase( iterator pos );
@@ -111,6 +117,7 @@ namespace ft {
 
 
     private:
+
         Allocator _alloc;
         T* _data;
 

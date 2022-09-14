@@ -4,7 +4,7 @@
 #include "../inc/vector.hpp"
 
 #include <exception>
-#include <algorithm>
+//#include <algorithm>
 //
 
 
@@ -38,18 +38,24 @@ vector<T, Allocator>::vector(size_type count,
     this->_size = count;
 }
 
-//template <typename InputIt>
 template <typename T, typename Allocator>
-vector<T, Allocator>::vector(pointer first, pointer last,
-                             const Allocator& alloc) {
+template <
+        typename InputIt
+        , typename
+         >
+vector<T, Allocator>::vector(InputIt first, InputIt last,
+                             const Allocator& alloc
+//        , typename enable_if< _is_not_integral<T>::value >::type*
+                             ) {
     this->_alloc = alloc;
-    for (pointer i = first; i != last ; ++i) {
+    this->_capacity = 0;
+    for (InputIt i = first; i != last ; ++i) {
         this->_capacity++;
     }
     this->_size = this->_capacity;
     this->_data = this->_alloc.allocate(this->_capacity);
     size_type n = 0;
-    for (pointer i = first; i != last ; i++, n++) {
+    for (InputIt i = first; i != last ; i++, n++) {
         this->_data[n] = *i;
     }
 }

@@ -164,32 +164,10 @@ namespace ft {
     template<> struct is_integral<long long int> : public true_type {};
 # endif
 
-    template <class _Tp> struct _is_integral : public is_integral<_Tp> {};
+    template <class Tp> struct _is_integral : public is_integral<Tp> {};
 
     template<> struct is_integral<char16_t> : public true_type {};
     template<> struct is_integral<char32_t> : public true_type {};
-
-//
-
-
-
-
-//
-//
-//    template< class InputIt1,
-//            class InputIt2,
-//            class BinaryPredicate >
-//    bool equal( InputIt1 first1,
-//                InputIt1 last1,
-//                InputIt2 first2,
-//                BinaryPredicate p );
-//
-//    template< class InputIt1, class InputIt2 >
-//    bool equal( InputIt1 first1, InputIt1 last1,
-//                InputIt2 first2 );
-//
-//
-
 
 
 
