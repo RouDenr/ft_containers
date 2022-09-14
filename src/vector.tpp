@@ -153,13 +153,15 @@ Allocator vector<T, Allocator>::get_allocator() const {
 
 template<typename T, typename Allocator>
 const T& vector<T, Allocator>::at(vector::size_type pos) const {
-    if (pos < size() || size() == 0)
+    if (pos >= size() || size() == 0)
         throw std::out_of_range("vector");
     return this->_data[pos];
 }
 
 template<typename T, typename Allocator>
 T& vector<T, Allocator>::at(vector::size_type pos) {
+    if (pos >= size() || size() == 0)
+        throw std::out_of_range("vector");
     return this->_data[pos];
 }
 
