@@ -3,6 +3,7 @@
 #ifndef __VECTOR_H__
 # define __VECTOR_H__
 # include <memory>
+# include "containers.h"
 
 namespace ft {
     template <typename T, typename Allocator = std::allocator<T> >
@@ -19,6 +20,7 @@ namespace ft {
 
         class const_iterator;
         class iterator;
+
 
 
         //! Constructors
@@ -52,10 +54,13 @@ namespace ft {
         const T* data() const;
 
         //! Iterators functions
-        const_iterator begin() const;
-        const_iterator end()   const;
-        iterator begin();
-        iterator end();
+        const_iterator  begin() const;
+        const_iterator  end()   const;
+        iterator        begin();
+        iterator        end();
+
+        reverse_iterator<iterator> rbegin();
+        reverse_iterator<iterator> rend();
 
         //! Capacity
         bool empty() const;
@@ -116,15 +121,15 @@ namespace ft {
     public:
         class const_iterator {
          public:
-            typedef T value_type;
-            typedef Allocator allocator_type;
-            typedef typename std::ptrdiff_t difference_type;
-            typedef value_type& reference;
-            typedef const value_type& const_reference;
-            typedef typename Allocator::pointer pointer;
-            typedef typename Allocator::const_pointer const_pointer;
-            typedef typename std::size_t size_type;
-            typedef typename std::random_access_iterator_tag iterator_category;
+            typedef T                                           value_type;
+            typedef Allocator                                   allocator_type;
+            typedef typename std::ptrdiff_t                     difference_type;
+            typedef value_type&                                 reference;
+            typedef const value_type&                           const_reference;
+            typedef typename Allocator::pointer                 pointer;
+            typedef typename Allocator::const_pointer           const_pointer;
+            typedef typename std::size_t                        size_type;
+            typedef typename std::random_access_iterator_tag    iterator_category;
 
             const_iterator();
             explicit const_iterator(pointer ptr);
@@ -151,7 +156,10 @@ namespace ft {
 
          protected:
             pointer _data;
+         private:
+            operator iterator();
         };
+
         class iterator : public const_iterator {
          public:
 
@@ -162,6 +170,14 @@ namespace ft {
             explicit iterator(pointer ptr) : const_iterator(ptr) {}
             iterator(const iterator& other) : const_iterator(other) {}
             explicit iterator(const const_iterator& other) : const_iterator(other) {}
+
+
+
+            iterator&           operator=(const iterator&);
+            iterator&           operator++();
+            const iterator      operator++(int);
+            iterator&           operator--();
+            const iterator      operator--(int);
 
 
             iterator         operator+(size_type n);
@@ -178,4 +194,5 @@ namespace ft {
 
 # include "../src/vector.tpp"
 }
+
 #endif //__VECTOR_H__
