@@ -279,7 +279,7 @@ vector<T, Allocator>::insert(vector::iterator pos, const T &value) {
         reserve(size() + 1);
     this->_size++;
     for (size_type i = index_pos + 1; i < size(); ++i) {
-        std::swap(at(i), temp);
+        ft::swap(at(i), temp);
     }
     return iterator(this->_data + index_pos);
 }
@@ -294,9 +294,13 @@ void vector<T, Allocator>::insert(vector::iterator pos, vector::size_type count,
         reserve(size() + count);
     this->_size += count;
     std::cout << index_pos << std::endl;
-    std::memmove(this->_data + index_pos + count, this->_data + index_pos,
-                 count * sizeof value);
-    for (size_type i = index_pos; i < count; i++) {
+
+//    std::memmove(this->_data + index_pos + count, this->_data + index_pos,
+//                 count * sizeof value);
+    for (size_type i = size(); i > index_pos + count; --i) {
+        ft:swap(at(i), at(i - index_pos));
+    }
+    for (size_type i = index_pos; i < count; ++i) {
         at(i) = value;
     }
 }
@@ -314,8 +318,11 @@ void vector<T, Allocator>::insert(vector::iterator pos, pointer first,
         reserve(size() + count);
     this->_size += count;
     if (index_pos < size())
-        std::memmove(this->_data + index_pos + count, this->_data + index_pos,
-                     count * sizeof *first);
+//        std::memmove(this->_data + index_pos + count, this->_data + index_pos,
+//                     count * sizeof *first);
+        for (size_type i = size(); i > index_pos + count; --i) {
+            ft::swap(at(i), at(i - index_pos));
+        }
     for (size_type i = index_pos; i < count + index_pos; i++) {
         this->_data[i] = *first;
         first++;
@@ -403,11 +410,11 @@ void vector<T, Allocator>::resize(vector::size_type count, T value) {
 
 template<typename T, typename Allocator>
 void vector<T, Allocator>::swap(vector &other) {
-    std::swap(this->_data, other._data);
+    ft::swap(this->_data, other._data);
     if (std::allocator_traits<allocator_type>::propagate_on_container_swap::value)
         std::swap(this->_alloc, other._alloc);
-    std::swap(this->_size, other._size);
-    std::swap(this->_capacity, other._capacity);
+    ft::swap(this->_size, other._size);
+    ft::swap(this->_capacity, other._capacity);
 }
 
 template<typename T, typename Allocator>
