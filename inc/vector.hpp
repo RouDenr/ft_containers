@@ -145,10 +145,14 @@ namespace ft {
 
 
             const_iterator&         operator=(const const_iterator&);
-            const_iterator&         operator++();
-            const const_iterator    operator++(int);
-            const_iterator&         operator--();
-            const const_iterator    operator--(int);
+
+            virtual const_iterator&         operator++();
+
+            virtual const const_iterator    operator++(int);
+
+            virtual const_iterator&         operator--();
+
+            virtual const const_iterator    operator--(int);
 
             const_iterator         operator+(size_type n) const;
             const_iterator         operator-(size_type n) const;
