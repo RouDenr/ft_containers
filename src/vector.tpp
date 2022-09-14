@@ -393,6 +393,16 @@ void vector<T, Allocator>::swap(vector &other) {
     std::swap(this->_capacity, other._capacity);
 }
 
+template<typename T, typename Allocator>
+reverse_iterator<typename vector<T, Allocator>::iterator> vector<T, Allocator>::rbegin() {
+    return reverse_iterator<iterator>(end());
+}
+
+template<typename T, typename Allocator>
+reverse_iterator<typename vector<T, Allocator>::iterator> vector<T, Allocator>::rend() {
+    return reverse_iterator<iterator>(begin());
+}
+
 
 
 
@@ -449,6 +459,10 @@ const typename vector<T, Allocator>::const_iterator vector<T, Allocator>::const_
     return temp;
 }
 
+template<typename T, typename Allocator>
+vector<T, Allocator>::const_iterator::operator iterator() {
+    return vector::iterator(this->_data);
+}
 
 template<typename T, typename Allocator>
 typename vector<T, Allocator>::const_reference vector<T, Allocator>::const_iterator::operator*() const {
@@ -511,4 +525,42 @@ template<typename T, typename Allocator>
 typename vector<T, Allocator>::iterator
 vector<T, Allocator>::iterator::operator-(vector::size_type n) {
     return vector::iterator(this->_data - n);
+}
+
+template<typename T, typename Allocator>
+typename vector<T, Allocator>::iterator &
+vector<T, Allocator>::iterator::operator=(const vector::iterator &other) {
+    if (this->_data != other._data) {
+        this->_data = other._data;
+    }
+    return *this;
+}
+
+template<typename T, typename Allocator>
+typename vector<T, Allocator>::vector::iterator
+&vector<T, Allocator>::iterator::operator++() {
+    this->_data++;
+    return *this;
+}
+
+template<typename T, typename Allocator>
+const typename vector<T, Allocator>::iterator
+vector<T, Allocator>::iterator::operator++(int) {
+    iterator temp(*this);
+    this->_data++;
+    return temp;
+}
+template<typename T, typename Allocator>
+typename vector<T, Allocator>::vector::iterator
+&vector<T, Allocator>::iterator::operator--() {
+    this->_data--;
+    return *this;
+}
+
+template<typename T, typename Allocator>
+const typename vector<T, Allocator>::iterator
+vector<T, Allocator>::iterator::operator--(int) {
+    iterator temp(*this);
+    this->_data--;
+    return temp;
 }
