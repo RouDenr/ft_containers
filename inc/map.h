@@ -34,14 +34,26 @@ namespace ft {
         class const_iterator;
         class iterator;
 
+     private:
         struct Node {
-            Node* left;
-            Node* right;
-            Node* parent;
-            value_type key_value;
+            Node*       left;
+            Node*       right;
+            Node*       parent;
+            value_type  key_value;
             bool red;
         };
+        //! NODE
+        Node *create_new_node(
+                Node* left,
+                Node* right,
+                Node* parent,
+                value_type key_value);
+        void destroy_node(Node *node);
+        Node    *next_node(Node *this_n);
+        Node    *prev_node(Node *this_n);
+        bool is_last_node(Node *node);
 
+     public:
         //! Constructors
         map()   : _head(NULL), _capacity(0), _size(0), _alloc(Allocator()),
                 _compare(Compare()) {} // (1)
@@ -52,9 +64,9 @@ namespace ft {
                 : _head(NULL), _capacity(0), _size(0), _alloc(alloc)
                 , _compare(Compare()) {} // (3)
 //        template<typename InputIt> // (4)
-        map(pointer first, pointer last,
-                const Compare& comp = Compare(),
-                const Allocator& alloc = Allocator());
+//        map(pointer first, pointer last,
+//                const Compare& comp = Compare(),
+//                const Allocator& alloc = Allocator());
 
         map(const map& other); // (6)
 
@@ -172,13 +184,16 @@ namespace ft {
             typedef typename Allocator::const_pointer   const_pointer;
             typedef typename std::size_t                size_type;
 
-            const_iterator();
-            const_iterator(pointer ptr);
-            const_iterator(const_pointer ptr);
-            const_iterator(const const_iterator& other);
+            const_iterator() : _data(NULL) {}
+            const_iterator(Node *ptr) : _data(ptr) {}
+            const_iterator(const Node * ptr) : _data(ptr) {}
+            const_iterator(const const_iterator& other) : _data(other._data) {}
 
 
-            const_iterator&         operator=(const const_iterator&);
+            const_iterator&         operator=(const const_iterator& other) {
+                if (this != &other)
+                    this->_data = other._data;
+            }
             const_iterator&         operator++();
             const const_iterator    operator++(int);
             const_iterator&         operator--();
@@ -187,16 +202,19 @@ namespace ft {
             const_iterator         operator+(size_type n) const;
             const_iterator         operator-(size_type n) const;
 
-            const_reference         operator*() const;
-            operator const_pointer() const;
+            const_reference         operator*() const {
+                return this->_data->key_value ;
+            }
 
-            bool operator!=(const const_iterator&);
+            bool operator!=(const const_iterator& other) {
+                return this->_data != other._data;
+            }
 
 
-            ~const_iterator();
+            ~const_iterator() {}
 
         protected:
-            value_type _data;
+            Node* _data;
         };
         class iterator : public const_iterator {
         public:
@@ -213,11 +231,11 @@ namespace ft {
             iterator         operator+(size_type n);
             iterator         operator-(size_type n);
 
-            reference   operator*();
+            reference   operator*() {
+                return this->_data->key_value ;
+            }
 
-            operator pointer();
-
-            ~iterator();
+            ~iterator() {}
         };
     };
 

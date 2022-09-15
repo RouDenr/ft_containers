@@ -3,15 +3,19 @@
 # include "../inc/map.h"
 # include <exception>
 
-#define __MAP map<Key, T, Compare, Allocator>
+#define __MAP ft::map<Key, T, Compare, Allocator>
+#define __REBIND_ALLOC(x, n) typename Allocator::rebind<x>::other(get_allocator()).allocate(n)
 
-template<typename Key, typename T, typename Compare, typename Allocator>
-map<Key, T, Compare, Allocator>::map(pointer first, pointer last,
-                                     const Compare &comp,
-                                     const Allocator &alloc)
-                                     : _compare(comp), _alloc(alloc) {
+#define __REBIND_DEALLOC(type, pointer, n) typename Allocator::rebind<type>:: \
+    other(get_allocator()).deallocate(pointer, n)
 
-}
+//template<typename Key, typename T, typename Compare, typename Allocator>
+//map<Key, T, Compare, Allocator>::map(pointer first, pointer last,
+//                                     const Compare &comp,
+//                                     const Allocator &alloc)
+//                                     : _compare(comp), _alloc(alloc) {
+//}
+
 
 template<typename Key, typename T, typename Compare, typename Allocator>
 map<Key, T, Compare, Allocator>::map(const map &other) {
@@ -243,4 +247,73 @@ template<typename Key, typename T, typename Compare, typename Allocator>
 typename __MAP::map::value_compare
 map<Key, T, Compare, Allocator>::value_comp() const {
     return this->_compare;
+}
+
+
+
+template<typename Key, typename T, typename Compare, typename Allocator>
+typename __MAP::Node *map<Key, T, Compare, Allocator>::create_new_node(map::Node *left,
+                                                            map::Node *right,
+                                                            map::Node *parent,
+                                                            map::value_type key_value) {
+    Node *new_node = __REBIND_ALLOC(Node, 1);
+    new_node->key_value = key_value;
+    new_node->left = left;
+    new_node->right = right;
+    new_node->parent = parent;
+    return new_node;
+}
+
+template<typename Key, typename T, typename Compare, typename Allocator>
+void map<Key, T, Compare, Allocator>::destroy_node(map::Node *node) {
+    __REBIND_DEALLOC(Node, node, 1);
+}
+
+template<typename Key, typename T, typename Compare, typename Allocator>
+typename __MAP::Node *map<Key, T, Compare, Allocator>::next_node(map::Node *this_n) {
+    return nullptr;
+}
+
+template<typename Key, typename T, typename Compare, typename Allocator>
+typename __MAP::Node *map<Key, T, Compare, Allocator>::prev_node(map::Node *this_n) {
+    return nullptr;
+}
+
+template<typename Key, typename T, typename Compare, typename Allocator>
+bool map<Key, T, Compare, Allocator>::is_last_node(map::Node *node) {
+    return node->right;
+}
+
+
+/// ! ITERATOR
+
+template<typename Key, typename T, typename Compare, typename Allocator>
+typename __MAP::const_iterator &
+map<Key, T, Compare, Allocator>::const_iterator::operator++() {
+
+//    if(!node1->isLast && !node1->right->isLast)
+//    {
+//        if(!node1->right->left->isLast)
+//        {
+//            node1 = node1->right;
+//            while(!node1->isLast)
+//                node1= node1->left;
+//            node1 = node1->parent;
+//        }
+//        else
+//            node1 = node1->right;
+//    }
+//    else
+//    {
+//        if(node1 == node1->parent->left)
+//            node1 = node1->parent;
+//        else if(node1 == node1->parent->right)
+//        {
+//            if(node1->key < node1->parent->parent->key)
+//                node1 = node1->parent->parent;
+//            else
+//                node1 = node1->right; //end
+//        }
+//    }
+    return *this;
 }
