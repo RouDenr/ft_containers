@@ -9,10 +9,16 @@
 #include "../inc/containers.h"
 #include "../inc/vector.hpp"
 #include "../inc/stack.h"
+#include "../inc/map.h"
 
 
 
 int main() {
+
+
+    ft::map<int, int> ft_map;
+    std::map<int, int> std_map;
+
 
     std::cout << "REV_VEC" << std::endl;
     int n_r[5] = {5,4,3,2,1};

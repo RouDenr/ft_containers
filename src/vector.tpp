@@ -1,9 +1,9 @@
 // Copyright 2022 by decordel
 
-#include "../inc/containers.h"
-#include "../inc/vector.hpp"
+# include "../inc/containers.h"
+# include "../inc/vector.hpp"
 
-#include <exception>
+# include <exception>
 //#include <algorithm>
 //
 
