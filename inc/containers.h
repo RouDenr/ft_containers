@@ -204,6 +204,7 @@ namespace ft {
         typedef T2 second_type;
 
         pair() { first = first_type(); second = second_type(); }
+        pair( const T1& x, T2& y ) : first(x), second(y) {}
         pair( const T1& x, const T2& y ) : first(x), second(y) {}
         pair( const pair& p ) {
             if (this != &p) {
@@ -213,8 +214,11 @@ namespace ft {
         }
 
         pair& operator=( const pair& other ) {
-            this->first = other.first;
-            this->second = other.second;
+            if (this != &other) {
+                this->first = other.first;
+                this->second = other.second;
+            }
+            return *this;
         }
 
 
