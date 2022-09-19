@@ -12,7 +12,8 @@ NAME_EXT	= 	${NAME}${EXT}
 S		=	src
 O		=	obj
 
-SRCS	=	main.cpp
+SRCS		=	main_ft.cpp
+SRCS_std	=	main_orig.cpp
 
 SRCS	:=	$(foreach file,$(SRCS),$S/$(file))
 
@@ -49,7 +50,7 @@ leaks	:	${NAME_EXT}
 norm	:
 	cpplint ${SRCS}
 
-NAME_TEST	= test_ft
+NAME_TEST	= main_ft
 #TEST_F		= -g -D COUNT=100
 TEST_F		= -g
 TEST_ARG	= 1
@@ -57,12 +58,12 @@ TEST_ARG	= 1
 all_tests : ${NAME_TEST}
 
 ${NAME_TEST} : ${OBJS}
-	${CC} ${TEST_F} src/test_orig.cpp -o test_orig
-	${CC} ${TEST_F} src/test_ft.cpp -o test_ft
+	${CC} ${TEST_F} src/main_orig.cpp -o test_orig
+	${CC} ${TEST_F} src/main_ft.cpp -o test_ft
 
 tests	: ${NAME_TEST}
 	time ./test_orig ${TEST_ARG} > test_orig.log || echo err
-	time ./${NAME_TEST} ${TEST_ARG} > test_ft.log  || echo err
+	time ./test_ft ${TEST_ARG} > test_ft.log  || echo err
 	diff test_ft.log test_orig.log
 
 #!--DEBUG

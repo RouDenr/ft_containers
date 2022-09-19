@@ -237,12 +237,12 @@ typename __MAP::size_type map<Key, T, Compare, Allocator, NodeAllocator>::erase(
     return 0;
 }
 
-template<typename Key, typename T, typename Compare, typename Allocator
-        , typename NodeAllocator>
-typename __MAP::iterator map<Key, T, Compare, Allocator, NodeAllocator>::erase(map::iterator first,
-                                                     map::iterator last) {
-    return map::iterator();
-}
+//template<typename Key, typename T, typename Compare, typename Allocator
+//        , typename NodeAllocator>
+//typename __MAP::iterator map<Key, T, Compare, Allocator, NodeAllocator>::erase(map::iterator first,
+//                                                     map::iterator last) {
+//    return map::iterator();
+//}
 
 template<typename Key, typename T, typename Compare, typename Allocator
         , typename NodeAllocator>
