@@ -6,8 +6,8 @@
 
 # include "containers.h"
 # include <memory>
-# include <map>
-# include <iostream>
+//# include <map>
+//# include <iostream>
 
 namespace ft {
 
@@ -63,13 +63,15 @@ namespace ft {
 
      public:
         //! Constructors
-        map()   : _head(NULL), _capacity(0), _size(0), _alloc(Allocator())
-                , _node_alloc(NodeAllocator()), _compare(Compare()) {} // (1)
+        map()   : _nil(_create_nil_node()) , _capacity(0), _size(0), _alloc(Allocator())
+                , _node_alloc(NodeAllocator()), _compare(Compare()) {
+            this->_head = _nil;
+        } // (1)
         map(const Compare& comp, const Allocator& alloc = Allocator())
-                : _head(NULL), _capacity(0), _size(0), _alloc(alloc)
+                : _nil(_create_nil_node()) ,_head(_nil), _capacity(0), _size(0), _alloc(alloc)
                 , _node_alloc(NodeAllocator()), _compare(comp) {} // (2)
         map(Allocator& alloc)
-                : _head(NULL), _capacity(0), _size(0), _alloc(alloc)
+                : _nil(_create_nil_node()) ,_head(_nil), _capacity(0), _size(0), _alloc(alloc)
                 , _node_alloc(NodeAllocator()), _compare(Compare()) {} // (3)
 //        template<typename InputIt> // (4)
 //        map(pointer first, pointer last,
@@ -108,9 +110,9 @@ namespace ft {
         void clear();
 
         pair<iterator, bool> insert(const value_type& value );
-        void insert( iterator pos, size_type count, const T& value );
-//        template< class InputIt >
-        void insert(pointer first, pointer last );
+//        void insert( iterator pos, size_type count, const T& value );
+////        template< class InputIt >
+//        void insert(pointer first, pointer last );
 
         iterator erase( iterator pos );
         iterator erase( iterator first, iterator last );
@@ -138,14 +140,15 @@ namespace ft {
 
         T& operator[](Key key);
         //! lexicographically compares the values in the map
-        bool operator==(const map& other);
-        bool operator!=(const map& other);
-        bool operator<(const map& other);
-        bool operator<=(const map& other);
-        bool operator>(const map& other);
-        bool operator>=(const map& other);
+//        bool operator==(const map& other);
+//        bool operator!=(const map& other);
+//        bool operator<(const map& other);
+//        bool operator<=(const map& other);
+//        bool operator>(const map& other);
+//        bool operator>=(const map& other);
 
         allocator_type get_allocator() const;
+
 
      protected:
         class value_compare  {
@@ -173,12 +176,13 @@ namespace ft {
 
      private:
         Node<value_type>    *_head;
+        Node<value_type>    *_nil;
         Allocator           _alloc;
         NodeAllocator       _node_alloc;
         size_type           _size;
         size_type           _capacity;
         value_compare       _compare;
-
+        friend class value_compare;
 
 
         node_type *_create_new_node(
@@ -186,23 +190,27 @@ namespace ft {
                 node_type* right,
                 node_type* parent,
                 value_type key_value);
+        node_type *_create_nil_node();
 
         void _delete_all_tree(node_type *head);
+        void _insert_all_tree(node_type *head);
 //        void map_init(co);
 
      public:
         class const_iterator {
          public:
-            const_iterator() : _data(NULL), _comp(Compare()) {}
-            const_iterator(node_type *ptr) : _data(ptr), _comp(Compare()) {}
-            const_iterator(const node_type * ptr) : _data(ptr), _comp(Compare()) {}
+            const_iterator() : _data(NULL), _nil(NULL), _comp(Compare()) {}
+            const_iterator(node_type *ptr) : _data(ptr), _nil(_find_nil()), _comp(Compare()) {}
+            const_iterator(const node_type * ptr) : _data(ptr), _nil(_find_nil()), _comp(Compare()) {}
             const_iterator(const const_iterator& other)
-                            : _data(other._data), _comp(Compare()) {}
+                            : _data(other._data), _nil(_find_nil()), _comp(Compare()) {}
 
 
             const_iterator&         operator=(const const_iterator& other) {
-                if (this != &other)
+                if (this != &other) {
                     this->_data = other._data;
+                    this->_nil = _find_nil();
+                }
                 return *this;
             }
             const_iterator&         operator++();
@@ -221,7 +229,7 @@ namespace ft {
                 return this->_data != other._data;
             }
 
-            value_type* operator->() {
+            const value_type* operator->() const {
                 return this->_data->value;
             }
 
@@ -229,7 +237,10 @@ namespace ft {
 
         protected:
             node_type* _data;
+            node_type* _nil;
             value_compare _comp;
+
+            node_type *_find_nil();
         };
         class iterator : public const_iterator {
         public:
@@ -243,15 +254,29 @@ namespace ft {
             iterator(const const_iterator& other) : const_iterator(other) {}
 
 
-            iterator         operator+(size_type n);
-            iterator         operator-(size_type n);
+            iterator         operator+(size_type n) {
+                iterator tmp(this->_data);
+                while (n-- != 0)
+                    ++tmp;
+                return tmp;
+            }
+            iterator         operator-(size_type n) {
+                iterator tmp(this->_data);
+                while (n-- != 0)
+                    ++tmp;
+                return tmp;
+            }
 
+            value_type* operator->() {
+                return this->_data->value;
+            }
             reference   operator*() {
                 return this->_data->key_value ;
             }
 
             ~iterator() {}
         };
+
     };
 
 # include "../src/map.tpp"
