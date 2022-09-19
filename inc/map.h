@@ -115,7 +115,7 @@ namespace ft {
 //        void insert(pointer first, pointer last );
 
         iterator erase( iterator pos );
-        iterator erase( iterator first, iterator last );
+//        iterator erase( iterator first, iterator last );
         size_type erase( const Key& key );
 
         void swap( map& other );

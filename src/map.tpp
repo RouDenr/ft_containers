@@ -246,7 +246,10 @@ typename __MAP::iterator map<Key, T, Compare, Allocator, NodeAllocator>::erase(m
 
 template<typename Key, typename T, typename Compare, typename Allocator
         , typename NodeAllocator>
-typename __MAP::iterator map<Key, T, Compare, Allocator, NodeAllocator>::erase(map::iterator pos) {
+typename __MAP::iterator map<Key, T, Compare, Allocator, NodeAllocator>::
+                erase(map::iterator pos) {
+
+
     return map::iterator();
 }
 

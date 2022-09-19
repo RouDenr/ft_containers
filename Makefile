@@ -1,6 +1,7 @@
-CC		= g++
+CC		= c++
 #FLAGS	= -Wall -Wextra -Werror -std=c++98
-FLAGS	= -g -Wall -Wextra
+#FLAGS	= -g -Wall -Wextra
+FLAGS	= -g
 
 EXT		= .out
 RM		= rm -rf
@@ -37,10 +38,10 @@ ARGS	= test 5 7
 
 run		:	${NAME_EXT}
 	@echo
-	@./$^ ${ARGS}
+	@./$^  ${ARGS}
 
 debug	:	${NAME_EXT}
-	@lldb -- ./$^$ ${ARGS}
+	@lldb -- ./$^ ${ARGS}
 
 leaks	:	${NAME_EXT}
 	@leaks --atExit -- ./$^  ${ARGS}
@@ -48,14 +49,20 @@ leaks	:	${NAME_EXT}
 norm	:
 	cpplint ${SRCS}
 
-#TEST_F	= -g -D COUNT=100
-TEST_F	= -g
+NAME_TEST	= test_ft
+#TEST_F		= -g -D COUNT=100
+TEST_F		= -g
+TEST_ARG	= 1
 
-tests	: ${OBJS}
+all_tests : ${NAME_TEST}
+
+${NAME_TEST} : ${OBJS}
 	${CC} ${TEST_F} src/test_orig.cpp -o test_orig
-	time ./test_orig 0 > test_orig.log || echo err
 	${CC} ${TEST_F} src/test_ft.cpp -o test_ft
-	time ./test_ft 0 > test_ft.log  || echo err
+
+tests	: ${NAME_TEST}
+	time ./test_orig ${TEST_ARG} > test_orig.log || echo err
+	time ./${NAME_TEST} ${TEST_ARG} > test_ft.log  || echo err
 	diff test_ft.log test_orig.log
 
 #!--DEBUG
