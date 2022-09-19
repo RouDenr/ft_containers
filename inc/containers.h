@@ -204,7 +204,7 @@ namespace ft {
         typedef T2 second_type;
 
         pair() { first = first_type(); second = second_type(); }
-        pair( const T1& x, T2& y ) : first(x), second(y) {}
+//        pair( const T1& x, T2& y ) : first(x), second(y) {}
         pair( const T1& x, const T2& y ) : first(x), second(y) {}
         pair( const pair& p ) {
             if (this != &p) {

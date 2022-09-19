@@ -26,11 +26,13 @@ __MAP::map(const map &other) : _compare(Compare()) {
     if (this != &other) {
         this->_alloc = other._alloc;
         this->_node_alloc = other._node_alloc;
-        this->_capacity = other._capacity;
-        this->_size = other._size;
+        this->_nil = _create_nil_node();
+        this->_head = _nil;
 //        for (iterator i = other.begin(); i != other.end(); ++i) {
 //            this->insert(i->first, i->second);
 //        }
+        this->_size = 0;
+        this->_capacity = 0;
         _insert_all_tree(other._head);
     }
 }
@@ -50,6 +52,7 @@ __MAP &map<Key, T, Compare, Allocator, NodeAllocator>::operator=(const map &othe
         this->_node_alloc = other._node_alloc;
         this->_capacity = other._capacity;
         this->_size = other._size;
+        this->_nil = _create_nil_node();
 //        for (iterator i = other.begin(); i != other.end(); ++i) {
 //            this->insert(i->first, i->second);
 //        }
@@ -63,14 +66,32 @@ template<typename Key, typename T, typename Compare, typename Allocator
         , typename NodeAllocator>
 typename __MAP::value_type
 &map<Key, T, Compare, Allocator, NodeAllocator>::at(const Key &key) {
-    return this[key];
+    node_type *tmp = this->_head;
+    while (tmp != _nil) {
+        if (tmp->value->first == key)
+            return tmp->value->second;
+        if (this->_compare(tmp->value->first, key))
+            tmp = tmp->right;
+        else
+            tmp = tmp->left;
+    }
+    throw std::out_of_range("map");
 }
 
 template<typename Key, typename T, typename Compare, typename Allocator
         , typename NodeAllocator>
 const typename __MAP::value_type &
 map<Key, T, Compare, Allocator, NodeAllocator>::at(const Key &key) const {
-    return this[key];
+    node_type *tmp = this->_head;
+    while (tmp != _nil) {
+        if (tmp->value->first == key)
+            return tmp->value->second;
+        if (this->_compare(tmp->value->first, key))
+            tmp = tmp->right;
+        else
+            tmp = tmp->left;
+    }
+    throw std::out_of_range("map");
 }
 
 
@@ -340,9 +361,7 @@ T& map<Key, T, Compare, Allocator, NodeAllocator>::operator[](const Key key) {
         else
             tmp = tmp->left;
     }
-
-
-//    return insert(make_pair<key_type, mapped_type>(key, mapped_type() ).second);
+    return insert(ft::make_pair<key_type, mapped_type>(key, mapped_type())).first->second;
 
 }
 //
@@ -443,9 +462,9 @@ template<typename Key, typename T, typename Compare, typename Allocator, typenam
 void map<Key, T, Compare, Allocator, NodeAllocator>::_insert_all_tree(
         map::node_type *head) {
     insert(*head->value);
-    if (head->right != _nil)
+    if (head->right->value)
         _insert_all_tree(head->right);
-    if (head->left != _nil)
+    if (head->left->value)
         _insert_all_tree(head->left);
 }
 
@@ -477,6 +496,7 @@ map<Key, T, Compare, Allocator, NodeAllocator>::const_iterator::operator++() {
     this->_data = tmp;
     return *this;
 }
+
 
 template<typename Key, typename T, typename Compare, typename Allocator
         , typename NodeAllocator>
