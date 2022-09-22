@@ -114,7 +114,7 @@ namespace ft {
 ////        template< class InputIt >
 //        void insert(pointer first, pointer last );
 
-        iterator erase( iterator pos );
+//        iterator erase( iterator pos );
 //        iterator erase( iterator first, iterator last );
         size_type erase( const Key& key );
 
@@ -195,6 +195,7 @@ namespace ft {
         void _delete_all_tree(node_type *head);
         void _insert_all_tree(node_type *head);
 //        void map_init(co);
+        node_type *_find_node(Key key);
 
      public:
         class const_iterator {

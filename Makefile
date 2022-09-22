@@ -35,7 +35,7 @@ $O/%.o		:	$S/%.cpp | $O
 
 #!--DEBUG
 
-ARGS	= test 5 7
+ARGS	= 0
 
 run		:	${NAME_EXT}
 	@echo

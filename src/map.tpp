@@ -42,6 +42,7 @@ template<typename Key, typename T, typename Compare, typename Allocator
 __MAP::~map() {
     if (this->_head != _nil)
         _delete_all_tree(this->_head);
+    this->_node_alloc.deallocate(this->_nil, 1);
 }
 
 template<typename Key, typename T, typename Compare, typename Allocator
@@ -233,8 +234,10 @@ map<Key, T, Compare, Allocator, NodeAllocator>::insert(const value_type &value) 
 
 template<typename Key, typename T, typename Compare, typename Allocator
         , typename NodeAllocator>
-typename __MAP::size_type map<Key, T, Compare, Allocator, NodeAllocator>::erase(const Key &key) {
-    return 0;
+typename __MAP::size_type ft::map<Key, T, Compare, Allocator, NodeAllocator>::erase(const Key &key) {
+    node_type *delete_node = _find_node(key);
+    if(delete_node == _nil)
+        throw std::runtime_error("Don`t have this key");
 }
 
 //template<typename Key, typename T, typename Compare, typename Allocator
@@ -244,14 +247,14 @@ typename __MAP::size_type map<Key, T, Compare, Allocator, NodeAllocator>::erase(
 //    return map::iterator();
 //}
 
-template<typename Key, typename T, typename Compare, typename Allocator
-        , typename NodeAllocator>
-typename __MAP::iterator map<Key, T, Compare, Allocator, NodeAllocator>::
-                erase(map::iterator pos) {
-
-
-    return map::iterator();
-}
+//template<typename Key, typename T, typename Compare, typename Allocator
+//        , typename NodeAllocator>
+//typename __MAP::iterator map<Key, T, Compare, Allocator, NodeAllocator>::
+//                erase(map::iterator pos) {
+//
+//
+//    return map::iterator();
+//}
 
 template<typename Key, typename T, typename Compare, typename Allocator
         , typename NodeAllocator>
@@ -350,6 +353,22 @@ template<typename Key, typename T, typename Compare, typename Allocator
 typename __MAP::key_compare
 map<Key, T, Compare, Allocator, NodeAllocator>::key_comp() const {
     return this->_compare.comp;
+}
+
+
+template<typename Key, typename T, typename Compare, typename Allocator
+        , typename NodeAllocator>
+typename __MAP::node_type *ft::map<Key, T, Compare, Allocator, NodeAllocator>::_find_node(Key key) {
+    node_type *tmp = this->_head;
+    while (tmp != _nil) {
+        if (tmp->value->first == key)
+            return tmp;
+        if (this->_compare(tmp->value->first, key))
+            tmp = tmp->right;
+        else
+            tmp = tmp->left;
+    }
+    return _nil;
 }
 
 template<typename Key, typename T, typename Compare, typename Allocator
